@@ -1,0 +1,56 @@
+name: Dockerize  Blazegraph
+on:
+  push:
+    branches:
+      - master
+      - geocodes
+
+defaults:
+  run:
+    working-directory: ./2.16-RC
+jobs:
+  deploy:
+    name: Dockerize Blazegraph
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Create Node Environment
+        uses: actions/setup-node@v2
+        env:
+          NODE_ENV:
+            production
+        with:
+          node-version: '20'
+      - run: npm install -g  yarn
+      - run: yarn install
+      - run: yarn build:ci
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: nsfearthcube/blazegraph
+          flavor: |
+            latest=true
+          tags: |
+            type=ref,event=tag
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: ./client
+          tags: ${{ steps.meta.outputs.tags }}
+          #          tags: nsfearthcube/ec_facets_client:latest
+          labels: ${{ steps.meta.outputs.labels }}

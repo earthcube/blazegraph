@@ -14,7 +14,7 @@ _loadData() {
     "${dataloader[@]}"
 }
 if [ "$1" = 'blazegraph' ]; then
-    set java_params=
+    set java_params='-Dfile.encoding=UTF-8'
 
     if [ ! -z "$JAVA_XMS" ]; then
         java_params+=( -Xms"${JAVA_XMS}" )
