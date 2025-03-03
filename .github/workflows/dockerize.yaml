@@ -7,7 +7,7 @@ on:
 
 defaults:
   run:
-    working-directory: ./2.16-RC
+    working-directory: 2.1.6-RC
 jobs:
   deploy:
     name: Dockerize Blazegraph
