@@ -5,9 +5,9 @@ on:
       - master
       - geocodes
 
-defaults:
-  run:
-    working-directory: 2.1.6-RC
+#defaults:
+#  run:
+#    working-directory: 2.1.6-RC
 jobs:
   deploy:
     name: Dockerize Blazegraph
@@ -41,7 +41,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          #context: 2.1.6-RC
+          context: 2.1.6-RC
           tags: ${{ steps.meta.outputs.tags }}
           #          tags: nsfearthcube/ec_facets_client:latest
           labels: ${{ steps.meta.outputs.labels }}
