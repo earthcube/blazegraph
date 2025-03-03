@@ -15,16 +15,7 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
-      - name: Create Node Environment
-        uses: actions/setup-node@v2
-        env:
-          NODE_ENV:
-            production
-        with:
-          node-version: '20'
-      - run: npm install -g  yarn
-      - run: yarn install
-      - run: yarn build:ci
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
